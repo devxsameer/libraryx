@@ -39,6 +39,9 @@ body {
   position: relative;
   accent-color: var(--color-primary);
 }
+a {
+  color: inherit;
+}
 input,
 button,
 textarea,
@@ -52,12 +55,12 @@ select {
 button {
   color: var(--color-text);
   border: 2px solid var(--color-primary);
-  padding: 0.4rem;
-  border-radius: 0.1rem;
+  padding: 0.4em;
+  border-radius: 0.1em;
   outline: none;
   background: var(--color-bg);
   transition: all 0.3s ease-in-out;
-  margin: 0.5rem 0;
+  margin: 0.5em 0;
   text-transform: uppercase;
   font-weight: 700;
   cursor: pointer;
@@ -118,13 +121,13 @@ h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: -100;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
 }
 .popup.active {
   opacity: 1;
@@ -132,7 +135,7 @@ h6 {
 }
 .popup-form {
   background-color: var(--color-bg);
-  flex: 0 1 400px;
+  flex: 0 1 350px;
   border-radius: 5px;
   padding: 1rem;
   display: flex;
@@ -170,7 +173,7 @@ h6 {
   gap: 5px;
 }
 .header .logo i.logo-icon {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-primary);
 }
@@ -194,7 +197,6 @@ h6 {
 /* Main */
 .main {
   flex: 1;
-  height: 100%;
   display: flex;
   flex-flow: row-reverse wrap;
   padding: 2rem;
@@ -204,27 +206,74 @@ h6 {
   flex: 4 1 900px;
   min-height: 50vh;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  grid-auto-rows: 250px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: max-content;
   gap: 2rem;
 }
 .main .cards-wrapper .card {
   background-color: var(--color-bg);
-  display: grid;
-  place-items: center;
-  padding: 5px;
+  border-left: 3px solid var(--color-primary);
+  padding: 0.5rem;
   border-radius: 0.5rem;
   box-shadow: 3px 3px 15px -2px rgb(0, 0, 0);
 }
-:root.light .main .cards-wrapper .card {
+.main .cards-wrapper .card h2 {
+  font-size: 1.3rem;
+}
+.main .cards-wrapper .card h3.author {
+  font-size: 1rem;
+  color: var(--color-ice-cold);
+}
+.main .cards-wrapper .card .card-utils {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.main .cards-wrapper .card .card-utils .card-btns .btn {
+  font-size: 0.8rem;
+}
+.card .card-utils .card-btns .delete-btn {
+  border-color: #ff7675;
+}
+.card .card-utils .card-btns .delete-btn:hover {
+  background-color: #ff7675;
+}
+.main .cards-wrapper .card .card-utils h3.pages {
+  font-size: 1.5rem;
+  font-family: "Sriracha", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+:root.light .main .cards-wrapper .card,
+:root.light .main .library-info {
   box-shadow: 3px 3px 12px -2px rgba(0, 0, 0, 0.61);
 }
 /* Library Info */
 .main .library-info {
   flex: 1 0 250px;
+  align-self: flex-start;
   display: flex;
   flex-flow: column wrap;
+  box-shadow: 3px 3px 15px -2px rgb(0, 0, 0);
+  background-color: var(--color-bg);
+  padding: 0.5rem 1rem;
 }
-.main .library-info .library-info-main {
+.main .library-info ul {
   padding: 1rem;
+}
+.main .library-info span {
+  font-family: "Sriracha", cursive;
+  font-size: 1.5rem;
+}
+.main .library-info h1 {
+  font-size: 1.25rem;
+  border-bottom: 2px solid var(--color-primary);
+}
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
 }

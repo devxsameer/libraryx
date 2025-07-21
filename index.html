@@ -20,6 +20,50 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <!-- PopUp Form -->
+    <div class="popup">
+      <form class="popup-form">
+        <div class="popup-header">
+          <h2>Add New Book</h2>
+          <div class="icon-box popup-close"><i class="bxr bxs-minus"></i></div>
+        </div>
+        <fieldset>
+          <legend>Book Title</legend>
+          <input
+            type="text"
+            name="title"
+            id="book-title"
+            placeholder="Ex. The Hobbit"
+            required
+          />
+        </fieldset>
+        <fieldset>
+          <legend>Book Author</legend>
+          <input
+            type="text"
+            name="author"
+            id="book-author"
+            placeholder="Ex. J.R.R. Tolkien"
+            required
+          />
+        </fieldset>
+        <fieldset>
+          <legend>Total Pages</legend>
+          <input
+            type="number"
+            name="pages"
+            id="book-pages"
+            placeholder="Ex. 355"
+            required
+          />
+        </fieldset>
+        <div class="checkbox">
+          <label for="book-read">Completed?</label>
+          <input type="checkbox" name="checkbox" id="book-read" />
+        </div>
+        <button type="submit" class="addbook-btn">Add Book</button>
+      </form>
+    </div>
     <div class="container">
       <!-- Header -->
       <div class="header">
@@ -27,7 +71,9 @@
           <i class="logo-icon bxr bx-book-open"></i>
           <h1>libraryX</h1>
         </div>
-        <div class="dark-mode"></div>
+        <div class="color-mode icon-box">
+          <i class="bx bx-moon"></i><i class="bx bx-sun-bright"></i>
+        </div>
       </div>
       <div class="main">
         <div class="library-info">

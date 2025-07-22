@@ -8,7 +8,7 @@ const popUpClose = document.querySelector(".popup-close");
 // Main Books Array
 let libraryX = [];
 // Color Mode
-let lightMode = "negative";
+let lightMode = "dark";
 
 // Make Popup Appear on Click Add New Btn
 addNewBtn.addEventListener("click", () => {
@@ -25,53 +25,60 @@ popUp.addEventListener("click", (e) => {
 popUpForm.addEventListener("submit", handleSubmit);
 // Set Color Mode
 window.addEventListener("load", () => {
-  let currLightMode = localStorage.getItem("lightMode");
-  if (currLightMode == "positive") {
-    setColorMode("positive");
-    lightMode == currLightMode;
-  } else if (localStorage.getItem("lightMode") == "negative") {
-    setColorMode("negative");
-    lightMode == currLightMode;
+  if (localStorage.getItem("lightMode")) {
+    lightMode = localStorage.getItem("lightMode");
+    setColorMode(lightMode);
   } else {
     localStorage.setItem("lightMode", lightMode);
   }
   colorMode.addEventListener("click", () => {
-    lightMode = lightMode == "positive" ? "negative" : "positive";
+    lightMode = lightMode == "light" ? "dark" : "light";
     setColorMode(lightMode);
-    localStorage.setItem("lightMode", lightMode);
   });
-  console.log(localStorage.getItem("lightMode"));
 });
 function setColorMode(lightMode) {
-  if (lightMode == "positive") {
+  if (lightMode == "light") {
     document.documentElement.classList.add("light");
   } else {
     document.documentElement.classList.remove("light");
   }
+  localStorage.setItem("lightMode", lightMode);
 }
 
 // Constructor for books
-function Book(title, author, pages, completed) {
-  this.id = crypto.randomUUID();
+function Book(title, author, pages, completed, id) {
+  if (!new.target) {
+    throw Error("You must use the 'new' operator to call the constructor");
+  }
+  if (id) {
+    this.id = id;
+  } else {
+    this.id = crypto.randomUUID();
+  }
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.completed = completed;
 }
 //Function on Prototype
-Book.prototype.completed = function () {
-  this.completed = true;
+Book.prototype.changeStatus = function () {
+  this.completed = !this.completed;
 };
 // Function for Creating Book and adding to LibraryX
-const addBookToLibrary = (title, author, pages, completed) => {
-  let newBook = new Book(title, author, pages, completed);
-  libraryX.unshift(newBook);
+const addBookToLibrary = (...args) => {
+  let newBook = new Book(...args);
+  libraryX.push(newBook);
+};
+const createNewBook = (...args) => {
+  addBookToLibrary(...args);
   // Updating local Storage After adding book
   updateLocalStorage();
+  // Showing Books
+  showBooks();
 };
 // Function for Deleting Book From LibraryX and LocalStorage
 const deleteBookFromLibrary = (e) => {
-  libraryX = libraryX.filter((book) => book.id !== e.target.value);
+  libraryX = libraryX.filter((book) => book.id !== e.target.dataset.id);
   // Updating local Storage After deleting book
   updateLocalStorage();
   showBooks();
@@ -96,37 +103,81 @@ const showInfo = () => {
     0
   );
 };
-// Function to Show Books
-const showBooks = () => {
-  // Getting Local storage Data
+// Getting Local storage Data
+const getLocalStorageData = () => {
   const localStorageData = localStorage.getItem("libraryX");
   if (localStorageData) {
-    libraryX = JSON.parse(localStorageData);
+    JSON.parse(localStorageData).forEach((book) =>
+      addBookToLibrary(
+        book.title,
+        book.author,
+        book.pages,
+        book.completed,
+        book.id
+      )
+    );
+  } else {
+    addBookToLibrary("The Hobbit", "J.R.R Tolkien", 300, false);
+    addBookToLibrary(
+      "Harry Potter and the Prisoner of Azkaban",
+      "J.K. Rowling",
+      317,
+      false
+    );
+    addBookToLibrary("Fire And Blood", "George Martin", 736, false);
   }
-  cardsWrapper.innerHTML = "";
+};
+// Function to update Status
+const updateStatus = (e) => {
   libraryX.forEach((book) => {
-    const cardOfBook = /*html*/ `
+    if (book.id == e.target.dataset.id) {
+      book.changeStatus();
+      updateLocalStorage();
+    }
+  });
+  showBooks();
+};
+// Function to Show Books
+const showBooks = () => {
+  cardsWrapper.innerHTML = "";
+  libraryX
+    .slice()
+    .reverse()
+    .forEach((book) => {
+      const cardOfBook = /*html*/ `
       <div class="card">
-        <div class="inner-card">
+        <div class="card-main">
           <h2>${book.title}</h2>
           <h3 class="author">by ${book.author}</h3>
-          <div class="card-utils">
-            <h3 class="pages">${book.pages}</h3>
-            <div class="card-btns">
-              <div class="read-status">
-              </div>
-              <button class="btn delete-btn" value="${book.id}">Delete</button>
+          <span class="read-status-label" data-status="${book.completed}">${
+        book.completed ? "Have Read It" : "Nor Read Yet"
+      }</span>
+        </div>
+        <div class="card-utils">
+          <span class="pages">${book.pages}</span>
+          <div class="card-btns">
+            <div class="read-status">
+              <button class="btn status-btn" data-id="${
+                book.id
+              }">Change Status</button>
             </div>
+            <button class="btn delete-btn" data-id="${book.id}">Delete</button>
           </div>
         </div>
       </div>`;
-    cardsWrapper.innerHTML += cardOfBook;
-  });
+      cardsWrapper.innerHTML += cardOfBook;
+    });
   // Event Handler for Delete Btn
   const deleteBtns = document.querySelectorAll(".delete-btn");
   if (deleteBtns) {
     deleteBtns.forEach((deleteBtn) => {
       deleteBtn.addEventListener("click", deleteBookFromLibrary);
+    });
+  }
+  const statusBtns = document.querySelectorAll(".status-btn");
+  if (statusBtns) {
+    statusBtns.forEach((statusBtn) => {
+      statusBtn.addEventListener("click", updateStatus);
     });
   }
   showInfo();
@@ -140,7 +191,7 @@ function handleSubmit(e) {
   const authorInput = document.querySelector("#book-author");
   const pagesInput = document.querySelector("#book-pages");
   const readInput = document.querySelector("#book-read");
-  addBookToLibrary(
+  createNewBook(
     titleInput.value,
     authorInput.value,
     pagesInput.value,
@@ -150,4 +201,7 @@ function handleSubmit(e) {
   showBooks();
   closePopUp();
 }
-window.addEventListener("load", showBooks);
+window.addEventListener("load", () => {
+  getLocalStorageData();
+  showBooks();
+});

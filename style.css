@@ -87,6 +87,7 @@ p {
 }
 h1 {
   font-weight: 500;
+  margin-bottom: 0;
 }
 h1,
 h2,
@@ -232,7 +233,7 @@ h6 {
 }
 .main .cards-wrapper .card span.read-status-label {
   font-size: 14px;
-  color: white;
+  color: var(--color-bg);
   padding: 4px;
   border-radius: 4px;
 }

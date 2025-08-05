@@ -1,5 +1,5 @@
 // Global Variables
-const colorMode = document.querySelector(".color-mode");
+const colorModeBtn = document.querySelector(".color-mode");
 const cardsWrapper = document.querySelector(".cards-wrapper");
 const addNewBtn = document.querySelector(".add-new-btn");
 const popUp = document.querySelector(".popup");
@@ -8,7 +8,7 @@ const popUpClose = document.querySelector(".popup-close");
 // Main Books Array
 let libraryX = [];
 // Color Mode
-let lightMode = "dark";
+let colorMode = "dark";
 
 // Make Popup Appear on Click Add New Btn
 addNewBtn.addEventListener("click", () => {
@@ -25,46 +25,45 @@ popUp.addEventListener("click", (e) => {
 popUpForm.addEventListener("submit", handleSubmit);
 // Set Color Mode
 window.addEventListener("load", () => {
-  if (localStorage.getItem("lightMode")) {
-    lightMode = localStorage.getItem("lightMode");
-    setColorMode(lightMode);
+  if (localStorage.getItem("colorMode")) {
+    colorMode = localStorage.getItem("colorMode");
+    setColorMode(colorMode);
   } else {
-    localStorage.setItem("lightMode", lightMode);
+    localStorage.setItem("colorMode", colorMode);
   }
-  colorMode.addEventListener("click", () => {
-    lightMode = lightMode == "light" ? "dark" : "light";
-    setColorMode(lightMode);
+  colorModeBtn.addEventListener("click", () => {
+    colorMode = colorMode == "light" ? "dark" : "light";
+    setColorMode(colorMode);
   });
 });
-function setColorMode(lightMode) {
-  if (lightMode == "light") {
+function setColorMode(colorMode) {
+  if (colorMode == "light") {
     document.documentElement.classList.add("light");
   } else {
     document.documentElement.classList.remove("light");
   }
-  localStorage.setItem("lightMode", lightMode);
+  localStorage.setItem("colorMode", colorMode);
 }
 
-// Constructor for books
-function Book(title, author, pages, completed, id) {
-  if (!new.target) {
-    throw Error("You must use the 'new' operator to call the constructor");
+// class for books
+class Book {
+  constructor(title, author, pages, completed, id) {
+    if (id) {
+      this.id = id;
+    } else {
+      this.id = crypto.randomUUID();
+    }
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.completed = completed;
   }
-  if (id) {
-    this.id = id;
-  } else {
-    this.id = crypto.randomUUID();
+  //Function go Change Status
+  changeStatus() {
+    this.completed = !this.completed;
   }
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.completed = completed;
 }
-//Function on Prototype
-Book.prototype.changeStatus = function () {
-  this.completed = !this.completed;
-};
-// Function for Creating Book and adding to LibraryX
+// Functions for Creating Book and adding to LibraryX
 const addBookToLibrary = (...args) => {
   let newBook = new Book(...args);
   libraryX.push(newBook);

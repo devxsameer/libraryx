@@ -23,13 +23,13 @@
   <body>
     <!-- PopUp Form -->
     <div class="popup">
-      <form class="popup-form">
+      <form class="popup-form" novalidate>
         <div class="popup-header">
           <h2>Add New Book</h2>
           <div class="icon-box popup-close"><i class="bxr bxs-minus"></i></div>
         </div>
-        <fieldset>
-          <legend>Book Title</legend>
+        <div class="form-control">
+          <label for="book-title">Book Title</label>
           <input
             type="text"
             name="title"
@@ -37,9 +37,10 @@
             placeholder="Ex. The Hobbit"
             required
           />
-        </fieldset>
-        <fieldset>
-          <legend>Book Author</legend>
+          <small>this is error</small>
+        </div>
+        <div class="form-control">
+          <label for="book-author">Book Author</label>
           <input
             type="text"
             name="author"
@@ -47,9 +48,10 @@
             placeholder="Ex. J.R.R. Tolkien"
             required
           />
-        </fieldset>
-        <fieldset>
-          <legend>Total Pages</legend>
+          <small>this is error</small>
+        </div>
+        <div class="form-control">
+          <label for="book-pages">Total Pages</label>
           <input
             type="number"
             name="pages"
@@ -57,7 +59,8 @@
             placeholder="Ex. 355"
             required
           />
-        </fieldset>
+          <small>this is error</small>
+        </div>
         <div class="checkbox">
           <label for="book-read">Completed?</label>
           <input type="checkbox" name="checkbox" id="book-read" />

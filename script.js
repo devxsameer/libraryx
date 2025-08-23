@@ -181,26 +181,90 @@ const showBooks = () => {
   }
   showInfo();
 };
+// Centralized validation rules
+const validators = {
+  title: {
+    required: true,
+    message: "Title is required",
+  },
+  author: {
+    required: true,
+    message: "Author name is required",
+  },
+  pages: {
+    required: true,
+    message: "Total pages is required",
+    validate: (value) =>
+      (!isNaN(value) && Number(value) > 0) || "Pages must be a positive number",
+  },
+};
 
-// function to handle new book addition
-function handleSubmit(e) {
-  // will do form validation later
-  e.preventDefault();
-  const titleInput = document.querySelector("#book-title");
-  const authorInput = document.querySelector("#book-author");
-  const pagesInput = document.querySelector("#book-pages");
-  const readInput = document.querySelector("#book-read");
-  createNewBook(
-    titleInput.value,
-    authorInput.value,
-    pagesInput.value,
-    readInput.checked
-  );
-  popUpForm.reset();
-  showBooks();
-  closePopUp();
+// Helper: set field state
+function seAdtFieldState(input, isValid, message = "no error") {
+  const control = input.parentElement;
+  control.classList.remove("error", "correct");
+  control.classList.add(isValid ? "correct" : "error");
+
+  const small = control.querySelector("small");
+  if (small) small.innerText = message;
 }
-window.addEventListener("load", () => {
-  getLocalStorageData();
-  showBooks();
+
+// Generic validator
+function validateField(input) {
+  const rules = validators[input.name];
+  if (!rules) return true; // skip if no rules
+
+  const value = input.value.trim();
+
+  if (rules.required && value === "") {
+    setFieldState(input, false, rules.message);
+    return false;
+  }
+
+  if (rules.validate) {
+    const validationResult = rules.validate(value);
+    if (validationResult !== true) {
+      setFieldState(input, false, validationResult);
+      return false;
+    }
+  }
+
+  setFieldState(input, true);
+  return true;
+}
+
+// Attach validation to all inputs
+Object.keys(validators).forEach((fieldName) => {
+  const input = popUpForm[fieldName];
+  input.addEventListener("input", () => validateField(input));
 });
+
+// Handle form submit
+function handleSubmit(e) {
+  e.preventDefault();
+
+  let isFormValid = true;
+  Object.keys(validators).forEach((fieldName) => {
+    const input = popUpForm[fieldName];
+    const valid = validateField(input);
+    if (!valid) isFormValid = false;
+  });
+
+  if (isFormValid) {
+    createNewBook(
+      popUpForm.title.value.trim(),
+      popUpForm.author.value.trim(),
+      popUpForm.pages.value.trim(),
+      popUpForm.checkbox.checked
+    );
+
+    popUpForm
+      .querySelectorAll(".form-control")
+      .forEach((c) => c.classList.remove("error", "correct"));
+    popUpForm.reset();
+    showBooks();
+    closePopUp();
+  }
+}
+
+popUpForm.addEventListener("submit", handleSubmit);

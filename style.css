@@ -149,12 +149,32 @@ h6 {
   justify-content: space-between;
   align-items: center;
 }
-.popup-form fieldset {
-  padding: 5px;
+.popup-form .form-control label {
+  display: inline-block;
+  margin-bottom: 5px;
+  font-size: 0.975;
+  color: rgb(62, 62, 62);
 }
-.popup-form fieldset input {
-  font-size: 1.125rem;
+.popup-form .form-control input {
+  font-size: 1rem;
+  display: block;
   width: 100%;
+  margin-bottom: 0;
+  border-bottom: 2px solid rgb(168, 168, 168);
+}
+.popup-form .form-control.correct input {
+  border-color: rgb(5, 189, 140);
+  /* margin-bottom: 6px; */
+}
+.popup-form .form-control.error input {
+  border-color: #ff7675;
+}
+.popup-form .form-control.error small {
+  visibility: visible;
+}
+.popup-form .form-control small {
+  color: #ff7675;
+  visibility: hidden;
 }
 .popup-form .checkbox {
   display: flex;

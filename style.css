@@ -6,9 +6,11 @@
   --color-bg: #0d0e10;
   --color-bg-secondary: #1f2833;
   --color-text: white;
+  --color-text-light: rgb(203, 203, 203);
 }
 :root.light {
   --color-bg: white;
+  --color-text-light: rgb(75, 75, 75);
   --color-text: black;
   --color-primary: #45a29e;
   --color-primary-heavy: #66fcf1;
@@ -153,7 +155,7 @@ h6 {
   display: inline-block;
   margin-bottom: 5px;
   font-size: 0.975;
-  color: rgb(62, 62, 62);
+  color: var(--color-text-light);
 }
 .popup-form .form-control input {
   font-size: 1rem;
